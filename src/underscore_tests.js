@@ -16,39 +16,81 @@ var _ = { };
   // Return an array of the first n elements of an array. If n is undefined,
   // return just the first element.
   _.first = function(array, n) {
+      if (n === 0) {
+          return []
+      } else {
+          return n ? array.slice(0, n) : array[0];
+      }
   };
 
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+      if (n === 0) {
+          return []
+      } else {
+          return n ? array.slice(-n) : array[array.length - 1];
+      }
   };
 
   // Call iterator(value, key, collection) for each element of collection.
   // Accepts both arrays and objects.
   _.each = function(collection, iterator) {
+      for (var i in collection) {
+          iterator(collection[i], i, collection);
+      }
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
   // is not present in the array.
-  _.indexOf = function(array, target){
+  _.indexOf = function(array, target) {
+      var indexFound = -1;
+      for (var i = 0; i < array.length; i++) {
+          if (array[i] === target) {
+              indexFound = i;
+              break;
+          }
+      } return indexFound;
   };
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, iterator) {
+      for (var i = collection.length - 1; i >= 0; i--) {
+          if (!iterator(collection[i])) {
+              collection.splice(i, 1);
+          }
+      } return collection;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, iterator) {
+      for (var i = collection.length - 1; i >= 0; i--) {
+          if (iterator(collection[i])) {
+              collection.splice(i, 1);
+          }
+      } return collection;
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+      for (var i = 0; i < array.length; i++) {
+          for (var j = i + 1; j < array.length; j++) {
+              if (array[i] === array[j]) {
+                  array.splice(j, 1);
+              }
+          }
+      } return array;
   };
 
 
   // Return the results of applying an iterator to each element.
   _.map = function(array, iterator) {
+      var newArr = [];
+      for (var i = 0; i < array.length; i++) {
+          newArr.push(iterator(array[i]));
+      } return newArr;
   };
+
 
   // Takes an array of objects and returns and array of the values of
   // a certain property in it. E.g. take an array of people and return
