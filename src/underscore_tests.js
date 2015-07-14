@@ -36,8 +36,14 @@ var _ = { };
   // Call iterator(value, key, collection) for each element of collection.
   // Accepts both arrays and objects.
   _.each = function(collection, iterator) {
-      for (var i in collection) {
-          iterator(collection[i], i, collection);
+      if (collection.hasOwnProperty('isArray')) {
+          for (var i = 0; i < collection.length; i ++) {
+              iterator(collection[i], i, collection);
+          }
+      } else {
+        for (var key in collection) {
+            iterator(collection[key], key, collection);
+        }
       }
   };
 
@@ -96,10 +102,17 @@ var _ = { };
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
   _.pluck = function(array, propertyName) {
+      var newArr = [];
+      for (var i = 0; i < array.length; i++) {
+          newArr.push(array[i][propertyName]);
+      } return newArr;
   };
 
   // Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName, args) {
+      for (var i = 0; i < list.length; i++) {
+          list[i] = list[i][methodName]();
+      } return list;
   };
 
   // Reduces an array or object to a single value by repetitively calling
@@ -193,7 +206,17 @@ var _ = { };
   // Takes a multidimensional array and converts it to a one-dimensional array.
   // The new array should contain all elements of the multidimensional array.
   _.flatten = function(nestedArray, result) {
-  };
+      result === undefined && (result = []);
+      for (var i = 0; i < nestedArray.length; i++) {
+          if (Object.prototype.toString.call(nestedArray[i]) === '[object Array]') {
+              _.flatten(nestedArray[i], result);
+          } else {
+              result.push(nestedArray[i]);
+          }
+      }
+
+      return result;
+  }
 
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
